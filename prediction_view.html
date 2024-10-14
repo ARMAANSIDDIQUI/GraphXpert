@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction View</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.1/css/bulma.min.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f7f7f7;
+        }
+        .container {
+            text-align: center;
+        }
+        table {
+            margin: 20px auto;
+            border-collapse: collapse;
+            width: 80%;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: center;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Prediction Results</h1>
+        <img src="data:image/png;base64,{{ plot_img }}" alt="Predicted Plot" />
+        <h2 class="subtitle">Predictions Table</h2>
+        <table>
+            <tr>
+                <th>Prediction Index</th>
+                <th>Predicted Value</th>
+            </tr>
+            {% for index, value in predictions.iterrows() %}
+            <tr>
+                <td>{{ index.strftime('%Y-%m-%d') }}</td>
+                <td>{{ value['Predictions'] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <br>
+        <a href="{{ url_for('upload_form') }}" class="button is-secondary">Back to Upload</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GraphXpert - Analysis and Recommendations</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.1/css/bulma.min.css">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background: url('/static/GIF 2.gif') no-repeat center center fixed;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.85);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 1200px;
+            text-align: left;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-top: 20px;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            margin: 0 auto;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .button.is-primary {
+            margin-top: 20px;
+            width: 100%;
+            font-size: 18px;
+            padding: 15px;
+        }
+
+        .select {
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .box {
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Analysis and Recommendations</h1>
+
+        <!-- Grid layout to show both analysis and recommendations side by side -->
+        <div class="grid-container">
+            <!-- Analysis Section -->
+            <div class="box">
+                <h2>Data Analysis</h2>
+                <h3>Data Properties:</h3>
+                <table>
+                    <tr>
+                        <th>Property</th>
+                        <th>Value</th>
+                    </tr>
+                    <tr>
+                        <td>Shape</td>
+                        <td>{{ analysis_result['shape'] }}</td>
+                    </tr>
+                    <tr>
+                        <td>Columns</td>
+                        <td>{{ analysis_result['columns'] }}</td>
+                    </tr>
+                </table>
+
+                <h3>Missing Values:</h3>
+                <table>
+                    <tr>
+                        <th>Column</th>
+                        <th>Missing Values</th>
+                    </tr>
+                    {% for col, count in analysis_result['missing_values'].items() %}
+                        <tr>
+                            <td>{{ col }}</td>
+                            <td>{{ count }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+
+                <h3>Descriptive Statistics:</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Statistic</th>
+                            {% for col in analysis_result['columns'] %}
+                                <th>{{ col }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in analysis_result['descriptive_statistics'] %}
+                        <tr>
+                            <td>{{ row['statistic'] }}</td>
+                            {% for col in analysis_result['columns'] %}
+                                <td>{{ row[col] }}</td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Recommendations Section -->
+            <div class="box">
+                <h2>Graph Recommendations</h2>
+                <ul>
+                    {% for recommendation, explanation in zip(recommendations, explanations) %}
+                        <li>
+                            <strong>{{ recommendation }}</strong>
+                            <p>{{ explanation }}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Button to Save Analysis and Recommendations -->
+        <form method="POST" action="{{ url_for('save_analysis') }}">
+            <input type="hidden" name="filename" value="{{ filename }}">
+            <button type="submit" class="button is-primary">Save Analysis and Recommendations</button>
+        </form>
+
+        <!-- Form to Select Plot Type -->
+        <form method="POST" action="{{ url_for('plot') }}">
+            <input type="hidden" name="filename" value="{{ filename }}">
+            <div class="select">
+                <select name="plot_type" required>
+                    <option value="" disabled selected>Select a graph type</option>
+                    <option value="scatter">Scatter Plot</option>
+                    <option value="line">Line Plot</option>
+                    <option value="bar">Bar Chart</option>
+                    <option value="hist">Histogram</option>
+                    <option value="box">Box Plot</option>
+                    <option value="pie">Pie Chart</option> <!-- Added Pie Chart option -->
+                </select>
+            </div>
+            <button type="submit" class="button is-primary">Start Plotting</button>
+        </form>
+    </div>
+</body>
+</html>

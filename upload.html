@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GraphXpert File Upload</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.1/css/bulma.min.css">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: url('/static/GIF 2.gif') no-repeat center center fixed;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.85);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            width: 90%;  /* Adjusted width for better responsiveness */
+            max-width: 500px;
+            height: auto;  /* Auto height to adjust based on content */
+            display: flex;
+            flex-direction: column;  /* Stack items vertically */
+            justify-content: center;  /* Center items vertically */
+            align-items: center;  /* Center items horizontally */
+            margin: 20px;  /* Add some margin around the container */
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .notification {
+            margin-bottom: 20px;  /* Increased margin for notifications */
+            width: 100%;  /* Make notification full width for consistency */
+        }
+
+        .button.is-primary {
+            width: 100%;
+            font-size: 18px;
+            padding: 15px;  /* Increased padding for buttons */
+            margin-top: 15px;  /* Added margin for spacing between buttons */
+        }
+
+        .file-name {
+            margin-top: 10px;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">GraphXpert - Upload a File</h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="notification is-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="/upload" enctype="multipart/form-data">
+            <div class="field">
+                <div class="file has-name">
+                    <label class="file-label">
+                        <input class="file-input" type="file" name="file" required id="file-input">
+                        <span class="file-cta">
+                            <span class="file-icon">
+                                <i class="fas fa-upload"></i>
+                            </span>
+                            <span class="file-label">
+                                Choose a file…
+                            </span>
+                        </span>
+                    </label>
+                </div>
+                <div class="file-name" id="file-name">No file chosen</div>
+            </div>
+
+            <div class="field">
+                <button type="submit" class="button is-primary">Upload</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script>
+        const fileInput = document.getElementById('file-input');
+        const fileNameDisplay = document.getElementById('file-name');
+
+        fileInput.addEventListener('change', function() {
+            const fileName = this.files.length > 0 ? this.files[0].name : 'No file chosen';
+            fileNameDisplay.textContent = fileName;
+        });
+    </script>
+</body>
+</html>

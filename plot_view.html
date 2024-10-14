@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GraphXpert - Plot View</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.1/css/bulma.min.css">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background: url('/static/GIF 2.gif') no-repeat center center fixed;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.85);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            width: 90%;  /* Adjusted width for better responsiveness */
+            max-width: 600px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        img {
+            margin-top: 20px;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .button.is-primary {
+            margin-top: 20px;
+            width: 100%;
+            font-size: 18px;
+        }
+
+        .input {
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .prediction-form {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Generated Plot</h1>
+        <img src="data:image/png;base64,{{ plot_img }}" alt="Plot">
+
+        <a href="{{ url_for('download_file', filename=plot_filename) }}" class="button is-primary">Save Graph</a>
+        <a href="{{ url_for('upload_form') }}" class="button is-primary">Upload Another File</a>
+
+        <div class="prediction-form">
+            <h2 class="subtitle">Start Prediction</h2>
+            <form method="POST" action="{{ url_for('start_prediction') }}">
+                <input type="hidden" name="filename" value="{{ filename }}">
+                <input type="hidden" name="plot_type" value="{{ plot_filename.split('_')[2] }}">
+                    <input class="input" type="number" name="n_predictions" placeholder="Enter number of values to predict" required>
+                <button type="submit" class="button is-primary">Start Prediction</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

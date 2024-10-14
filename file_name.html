@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Uploaded</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.1/css/bulma.min.css">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background: url('/static/GIF 2.gif') no-repeat center center fixed;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.85);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            width: 90%;  /* Adjusted width for better responsiveness */
+            max-width: 500px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .button.is-primary {
+            width: 100%;
+            font-size: 18px;
+            padding: 15px;  /* Increased padding for buttons */
+            margin-top: 20px;  /* Added margin for spacing */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">File Uploaded Successfully!</h1>
+        <p class="subtitle">Filename: {{ filename }}</p>
+        
+        <form method="POST" action="/start_analysis">
+            <input type="hidden" name="filename" value="{{ filename }}">
+            <button type="submit" class="button is-primary">Start Analysis</button>
+        </form>
+    </div>
+</body>
+</html>
